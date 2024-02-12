@@ -62,7 +62,6 @@ def final_dictionary():
              'subaru':['wrx','crosstrek'],
              'volkswagen':['e-golf','golf','golf gti','golf r','jetta','passat','taos','atlas'] 
              }
-    
     return Dict
 
 
@@ -111,27 +110,23 @@ def main():
     If there are any errors in fetching the data then the code will continue to run and cars that produced errors
     will be put into a list so that each case can be investigated
     """
-     
-    Dict = final_dictionary()
     
     #test cases: 
     #Dict = { 'cadillac':['escalade','xt4','xt5','xt6']}
     #Dict = {'tesla':['model 3','model s','model x', 'model y'] , 'porsche':['taycan'] }
+    Dict = final_dictionary()
     
     failed_car = []
     final = []
     for key,value in Dict.items():
         for i in value:
-            
             make = key
             model = i
-            
             try:
                 web_url = url(make,model)
                 response = data_request(web_url)
                 soup = BeautifulSoup(response.content, 'html.parser')
                 trim = soup.find_all("ul", attrs={'id':'fbTrim'})
-                
                 #cleaning the data
                 trim_lst = []
                 for wrapper in trim:
@@ -139,17 +134,14 @@ def main():
                     trim_lst.append(s.split("\n"))  
                 trim_lst = trim_lst[0]
                 trim_lst = [i for i in trim_lst if i]
-                
                 ff = [make,model]
                 for item in trim_lst:
                     ff.append(re.sub(r" ?\([^)]+\)", "", item))
                 final.append(ff)
-
             except Exception as error:
                 failed_car.append(key)
                 failed_car.append(model)
                 pass
-       
     features = find_max_list(final)
     f_header = headers(features)  
     df = pd.DataFrame(final, columns = f_header)   
