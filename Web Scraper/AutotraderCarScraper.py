@@ -63,7 +63,6 @@ def data_request(url):
                     '184.107.90.1:3128',
                     ]
     
-    
     #randomize user agent to prevent server blocks
     user_agent = random.choice(user_agent_list)
     header = ({'User-Agent': user_agent}) 
@@ -131,7 +130,6 @@ def url_counter(soup_):
     for wrapper in num_page:
         count = wrapper.text
 
-    
     count = int(count.replace(",", ""))
     count_val = int(roundup(count)/100)
     
